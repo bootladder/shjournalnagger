@@ -1,0 +1,7 @@
+---
+dontcare: Hello
+journals:
+  - name: My Journal
+    path: /tmp/journals/myjournal
+  - name: Other Journal
+    path: /tmp/journals/otherjournal
