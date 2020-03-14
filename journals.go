@@ -2,10 +2,8 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -19,7 +17,7 @@ type Journals struct {
 	}
 }
 
-func parseJournals(reader io.Reader) Journals {
+func parseJournals(reader io.Reader) (Journals, error) {
 
 	journalsReader := bufio.NewReader(reader)
 	journalsBuf, _ := ioutil.ReadAll(journalsReader)
@@ -28,9 +26,20 @@ func parseJournals(reader io.Reader) Journals {
 
 	err := yaml.Unmarshal([]byte(journalsBuf), &journals)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		return Journals{}, err
 	}
-	fmt.Printf("--- t:\n%v\n\n", journals)
 
-	return journals
+	return journals, nil
+}
+
+func parseJournalsBytes(b []byte) (Journals, error) {
+
+	journals := Journals{}
+
+	err := yaml.Unmarshal(b, &journals)
+	if err != nil {
+		return Journals{}, err
+	}
+
+	return journals, nil
 }

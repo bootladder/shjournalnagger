@@ -12,7 +12,7 @@ func Test_RenderMenu(t *testing.T) {
 	journalsFilename := "test-journals.yaml"
 	f, _ := os.Open(journalsFilename)
 	journalsReader := bufio.NewReader(f)
-	journals := parseJournals(journalsReader)
+	journals, _ := parseJournals(journalsReader)
 
 	menuStr := renderMenu(journals)
 

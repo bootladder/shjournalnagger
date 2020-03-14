@@ -17,12 +17,20 @@ func shjournalnagger(
 	writer.Write([]byte(menuStr))
 
 	userInputBuf := bufio.NewReader(reader)
-	line, _ := userInputBuf.ReadBytes('\n')
+	line, err := userInputBuf.ReadBytes('\n')
 
-	if string(line) != "1\n" {
-		writer.Write([]byte("Invalid Input"))
-	} else {
+	if err != nil {
+		writer.Write([]byte("Quitting"))
+		return
+	}
+
+	switch line[0] {
+	case '1':
 		commander.command(1)
+	case 'q':
+		break
+	default:
+		writer.Write([]byte("Invalid Input"))
 	}
 
 }

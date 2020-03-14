@@ -65,6 +65,13 @@ func Test_Journal1Selected_CallsCommander(t *testing.T) {
 	shjournalnagger(&writer, reader, Journals{}, &mockCommander)
 
 	assert.NotContains(t, string(writer.Bytes()), "Invalid Input")
-
 	assert.Equal(t, 1, mockCommander.lastValue)
+}
+
+func Test_Quit_QuitsQuietly(t *testing.T) {
+	var writer bytes.Buffer
+	reader := bytes.NewReader([]byte("q\n"))
+
+	shjournalnagger(&writer, reader, Journals{}, nil)
+	assert.NotContains(t, string(writer.Bytes()), "Invalid Input")
 }

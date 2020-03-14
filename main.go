@@ -1,12 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
 func main() {
 
-	shjournalnagger(os.Stdout, os.Stdin, Journals{}, JournalCommander{})
-	fmt.Println("hello world")
+	journalConfigFile := JournalConfigFile{}
+	journals, err := journalConfigFileLogic(journalConfigFile, os.Stdout)
+	if err != nil {
+		return
+	}
+
+	shjournalnagger(os.Stdout, os.Stdin, journals, JournalCommander{})
 }

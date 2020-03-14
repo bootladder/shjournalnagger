@@ -11,7 +11,7 @@ import (
 
 func Test_JournalsParser(t *testing.T) {
 	journalsReader := getTestJournalsConfigReader()
-	journals := parseJournals(journalsReader)
+	journals, _ := parseJournals(journalsReader)
 	name1 := journals.Journals[0].Name
 	path1 := journals.Journals[0].Path
 	name2 := journals.Journals[1].Name
@@ -31,5 +31,6 @@ func getTestJournalsConfigReader() io.Reader {
 
 func getTestJournals() Journals {
 	journalsReader := getTestJournalsConfigReader()
-	return parseJournals(journalsReader)
+	journals, _ := parseJournals(journalsReader)
+	return journals
 }
