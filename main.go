@@ -7,6 +7,6 @@ import (
 
 func main() {
 
-	shjournalnagger(os.Stdout, os.Stdin)
+	shjournalnagger(os.Stdout, os.Stdin, Journals{}, JournalCommander{})
 	fmt.Println("hello world")
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"io"
 	"os"
 	"testing"
 
@@ -9,11 +10,8 @@ import (
 )
 
 func Test_JournalsParser(t *testing.T) {
-	journalsFilename := "test-journals.yaml"
-	f, _ := os.Open(journalsFilename)
-	journalsReader := bufio.NewReader(f)
+	journalsReader := getTestJournalsConfigReader()
 	journals := parseJournals(journalsReader)
-
 	name1 := journals.Journals[0].Name
 	path1 := journals.Journals[0].Path
 	name2 := journals.Journals[1].Name
@@ -23,4 +21,15 @@ func Test_JournalsParser(t *testing.T) {
 	assert.Equal(t, name2, "Other Journal")
 	assert.Equal(t, path1, "/tmp/journals/myjournal")
 	assert.Equal(t, path2, "/tmp/journals/otherjournal")
+}
+
+func getTestJournalsConfigReader() io.Reader {
+	journalsFilename := "test-journals.yaml"
+	f, _ := os.Open(journalsFilename)
+	return bufio.NewReader(f)
+}
+
+func getTestJournals() Journals {
+	journalsReader := getTestJournalsConfigReader()
+	return parseJournals(journalsReader)
 }

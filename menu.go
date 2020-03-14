@@ -8,7 +8,7 @@ func renderMenu(journals Journals) string {
 		menuStr += fmt.Sprintf("[%d] : %s\n", i, journal.Name)
 	}
 
-	menuStr += "[q] : Exit"
+	menuStr += "[q] : Exit\n\n"
 	menuStr += "Select an Option: "
 	return menuStr
 }

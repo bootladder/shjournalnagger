@@ -5,12 +5,24 @@ import (
 	"io"
 )
 
-func shjournalnagger(writer io.Writer, reader io.Reader) {
+func shjournalnagger(
+	writer io.Writer,
+	reader io.Reader,
+	journals Journals,
+	commander Commander) {
 
 	writer.Write([]byte(defaultTopPrompt))
-	writer.Write([]byte("hello"))
+
+	menuStr := renderMenu(journals)
+	writer.Write([]byte(menuStr))
 
 	userInputBuf := bufio.NewReader(reader)
 	line, _ := userInputBuf.ReadBytes('\n')
-	writer.Write(line)
+
+	if string(line) != "1\n" {
+		writer.Write([]byte("Invalid Input"))
+	} else {
+		commander.command(1)
+	}
+
 }
