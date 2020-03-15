@@ -25,7 +25,7 @@ func (j JournalConfigFile) Read(p []byte) (n int, err error) {
 	journalsReader := bufio.NewReader(f)
 	journalsBuf, _ := ioutil.ReadAll(journalsReader)
 	copy(p, journalsBuf)
-	return 0, err
+	return len(journalsBuf), io.EOF
 }
 func (j JournalConfigFile) Write(p []byte) (n int, err error) {
 

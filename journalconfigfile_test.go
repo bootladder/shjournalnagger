@@ -21,14 +21,15 @@ func (m MockReadWriter) Read(b []byte) (int, error) {
 		return 0, errors.New("fail")
 	}
 	if m.shouldReadInvalidFileContent {
-		copy(b, []byte("blah blha bad ymal file"))
-		return 0, nil
+		var dummyString = []byte("blah blha bad ymal file")
+		copy(b, dummyString)
+		return len(dummyString), io.EOF
 	}
 
 	journalBytes, _ := ioutil.ReadFile("test-journals.yaml")
-	copy(b, []byte(journalBytes))
+	copy(b, journalBytes)
 
-	return 1, io.EOF
+	return len(journalBytes), io.EOF
 }
 func (m *MockReadWriter) Write(b []byte) (int, error) {
 
@@ -70,5 +71,16 @@ func Test_JournalConfigFileLogic_HappyPath_LoadsJournals(t *testing.T) {
 	journals, err := journalConfigFileLogic(&mockReadWriter, &writer)
 
 	assert.Equal(t, "Other Journal", journals.Journals[1].Name)
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
+}
+
+func Test_SanityCheck(t *testing.T) {
+
+	var mockReadWriter MockReadWriter
+	mockReadWriter.shouldFailReading = false
+	mockReadWriter.shouldReadInvalidFileContent = false
+
+	ioutil.ReadAll(mockReadWriter)
+	//fmt.Println(string(b))
+	//fmt.Println("WAT")
 }
