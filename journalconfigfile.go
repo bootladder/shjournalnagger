@@ -13,8 +13,9 @@ var journalsFilename = "/home/steve/.shjournalnagger/journals.yaml"
 
 //JournalConfigFile is the real ReadWriter.  It is a thin layer of UNTESTED code
 type JournalConfigFile struct {
-	Editor   string `yaml:"editor"`
-	Journals []Journal
+	Editor                 string `yaml:"editor"`
+	NaggingIntervalSeconds int    `yaml:"naggingintervalseconds"`
+	Journals               []Journal
 }
 
 //Journal is inside the config
@@ -34,6 +35,7 @@ func (j JournalConfigFile) Read(p []byte) (n int, err error) {
 	copy(p, journalsBuf)
 	return len(journalsBuf), io.EOF
 }
+
 func (j JournalConfigFile) Write(p []byte) (n int, err error) {
 
 	if _, err := os.Stat(journalsFilename); os.IsNotExist(err) {
@@ -51,6 +53,7 @@ func (j JournalConfigFile) Write(p []byte) (n int, err error) {
 
 	return
 }
+
 func (j JournalConfigFile) parseJournals() JournalConfigFile { return JournalConfigFile{} }
 
 // This function is tested

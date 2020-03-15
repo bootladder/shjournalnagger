@@ -7,10 +7,18 @@ import (
 func main() {
 
 	// this sucks
-	journals, err := journalConfigFileLogic(JournalConfigFile{}, os.Stdout)
+	journalConfigFile, err := journalConfigFileLogic(JournalConfigFile{}, os.Stdout)
 	if err != nil {
 		return
 	}
 
-	shjournalnagger(os.Stdout, os.Stdin, journals, &JournalCommander{&ShellCommandExecuter{}, journals})
+	journalCommander := &JournalCommander{&ShellCommandExecuter{}, journalConfigFile}
+
+	elapsedTimeChecker := &ElapsedTimeChecker{
+		&RealLastNaggingTimeFileReader{},
+		&RealLastNaggingTimeFileWriter{},
+		&RealCurrentTimeGetter{},
+	}
+
+	shjournalnagger(os.Stdout, os.Stdin, journalConfigFile, journalCommander, elapsedTimeChecker)
 }

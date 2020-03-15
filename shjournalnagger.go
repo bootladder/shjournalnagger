@@ -8,19 +8,26 @@ import (
 )
 
 func shjournalnagger(
-	writer io.Writer,
-	reader io.Reader,
+	userOutputWriter io.Writer,
+	userInputReader io.Reader,
 	journalConfigFile JournalConfigFile,
-	journalOpener JournalOpener) {
+	journalOpener JournalOpener,
+	naggingIntervalTracker NaggingIntervalTracker) {
 
-	writer.Write([]byte(defaultTopPrompt))
-	writer.Write([]byte(renderMenu(journalConfigFile)))
+	if false == naggingIntervalTracker.isNaggingIntervalExpired(journalConfigFile.NaggingIntervalSeconds) {
+		return
+	}
 
-	userInputBuf := bufio.NewReader(reader)
+	naggingIntervalTracker.updateLastNaggingTime()
+
+	userOutputWriter.Write([]byte(defaultTopPrompt))
+	userOutputWriter.Write([]byte(renderMenu(journalConfigFile)))
+
+	userInputBuf := bufio.NewReader(userInputReader)
 	inputBytesWithNewline, err := userInputBuf.ReadBytes('\n')
 
 	if err != nil {
-		writer.Write([]byte("Quitting"))
+		userOutputWriter.Write([]byte("Quitting"))
 		return
 	}
 
@@ -38,5 +45,5 @@ func shjournalnagger(
 		}
 	}
 
-	writer.Write([]byte("Invalid Input\n"))
+	userOutputWriter.Write([]byte("Invalid Input\n"))
 }
