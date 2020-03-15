@@ -1,5 +1,5 @@
 ---
-dontcare: Hello
+editor: nano
 journals:
   - name: My Journal
     path: /tmp/journals/myjournal

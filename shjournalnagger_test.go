@@ -47,12 +47,12 @@ func Test_InvalidUserInput_PrintsMessage(t *testing.T) {
 	assert.Contains(t, string(writer.Bytes()), "Invalid Input")
 }
 
-type MockCommander struct {
+type MockJournalOpener struct {
 	called    bool
 	lastValue int
 }
 
-func (m *MockCommander) command(i int) {
+func (m *MockJournalOpener) openJournal(i int) {
 	m.called = true
 	m.lastValue = i
 }
@@ -75,9 +75,9 @@ func Test_N_Journals_AcceptsUserInput_1_to_N(t *testing.T) {
 
 	var writer bytes.Buffer
 	reader := bytes.NewReader([]byte("3\n"))
-	mockCommander := MockCommander{}
-	shjournalnagger(&writer, reader, journalConfigFile, &mockCommander)
-	assert.Equal(t, 3, mockCommander.lastValue)
+	mockJournalOpener := MockJournalOpener{}
+	shjournalnagger(&writer, reader, journalConfigFile, &mockJournalOpener)
+	assert.Equal(t, 3, mockJournalOpener.lastValue)
 }
 
 func Test_N_Journals_DoesNotAccept_0_Input(t *testing.T) {
@@ -87,7 +87,7 @@ func Test_N_Journals_DoesNotAccept_0_Input(t *testing.T) {
 
 	var writer bytes.Buffer
 	reader := bytes.NewReader([]byte("0\n"))
-	mockCommander := MockCommander{}
-	shjournalnagger(&writer, reader, journalConfigFile, &mockCommander)
-	assert.Equal(t, false, mockCommander.called)
+	mockJournalOpener := MockJournalOpener{}
+	shjournalnagger(&writer, reader, journalConfigFile, &mockJournalOpener)
+	assert.Equal(t, false, mockJournalOpener.called)
 }

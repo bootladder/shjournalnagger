@@ -13,7 +13,7 @@ var journalsFilename = "/home/steve/.shjournalnagger/journals.yaml"
 
 //JournalConfigFile is the real ReadWriter.  It is a thin layer of UNTESTED code
 type JournalConfigFile struct {
-	Dontcare string `yaml:"dontcare"`
+	Editor   string `yaml:"editor"`
 	Journals []Journal
 }
 

@@ -11,7 +11,7 @@ func shjournalnagger(
 	writer io.Writer,
 	reader io.Reader,
 	journalConfigFile JournalConfigFile,
-	commander Commander) {
+	journalOpener JournalOpener) {
 
 	writer.Write([]byte(defaultTopPrompt))
 	writer.Write([]byte(renderMenu(journalConfigFile)))
@@ -33,7 +33,7 @@ func shjournalnagger(
 	number, err := strconv.Atoi((line))
 	if err == nil {
 		if number > 0 && number <= len(journalConfigFile.Journals) {
-			commander.command(number)
+			journalOpener.openJournal(number)
 			return
 		}
 	}
