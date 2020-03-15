@@ -13,7 +13,14 @@ var journalsFilename = "/home/steve/.shjournalnagger/journals.yaml"
 
 //JournalConfigFile is the real ReadWriter.  It is a thin layer of UNTESTED code
 type JournalConfigFile struct {
-	journals Journals
+	Dontcare string `yaml:"dontcare"`
+	Journals []Journal
+}
+
+//Journal is inside the config
+type Journal struct {
+	Name string `yaml:"name"`
+	Path string `yaml:"path"`
 }
 
 func (j JournalConfigFile) Read(p []byte) (n int, err error) {
@@ -44,11 +51,11 @@ func (j JournalConfigFile) Write(p []byte) (n int, err error) {
 
 	return
 }
-func (j JournalConfigFile) parseJournals() Journals { return Journals{} }
+func (j JournalConfigFile) parseJournals() JournalConfigFile { return JournalConfigFile{} }
 
 // This function is tested
 func journalConfigFileLogic(journalConfigFile io.ReadWriter,
-	output io.Writer) (Journals, error) {
+	output io.Writer) (JournalConfigFile, error) {
 
 	// Open and read the file
 	//b := make([]byte, 1000	)
@@ -66,7 +73,7 @@ func journalConfigFileLogic(journalConfigFile io.ReadWriter,
 	journals, err := parseJournalsBytes(b)
 	if err != nil {
 		output.Write([]byte(invalidJournalConfigErrorMessage))
-		return Journals{}, errors.New("Invalid Config File")
+		return JournalConfigFile{}, errors.New("Invalid Config File")
 	}
 	return journals, err
 }

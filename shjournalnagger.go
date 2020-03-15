@@ -3,34 +3,40 @@ package main
 import (
 	"bufio"
 	"io"
+	"strconv"
+	"strings"
 )
 
 func shjournalnagger(
 	writer io.Writer,
 	reader io.Reader,
-	journals Journals,
+	journalConfigFile JournalConfigFile,
 	commander Commander) {
 
 	writer.Write([]byte(defaultTopPrompt))
-
-	menuStr := renderMenu(journals)
-	writer.Write([]byte(menuStr))
+	writer.Write([]byte(renderMenu(journalConfigFile)))
 
 	userInputBuf := bufio.NewReader(reader)
-	line, err := userInputBuf.ReadBytes('\n')
+	inputBytesWithNewline, err := userInputBuf.ReadBytes('\n')
 
 	if err != nil {
 		writer.Write([]byte("Quitting"))
 		return
 	}
 
-	switch line[0] {
-	case '1':
-		commander.command(1)
-	case 'q':
-		break
-	default:
-		writer.Write([]byte("Invalid Input"))
+	line := strings.TrimSpace(string(inputBytesWithNewline))
+
+	if string(line) == "q" {
+		return
 	}
 
+	number, err := strconv.Atoi((line))
+	if err == nil {
+		if number > 0 && number <= len(journalConfigFile.Journals) {
+			commander.command(number)
+			return
+		}
+	}
+
+	writer.Write([]byte("Invalid Input\n"))
 }

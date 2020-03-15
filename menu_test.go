@@ -19,6 +19,9 @@ func Test_RenderMenu(t *testing.T) {
 	assert.Contains(t, menuStr, "My Journal")
 	assert.Contains(t, menuStr, "Other Journal")
 
+	assert.Contains(t, menuStr, "1")
+	assert.Contains(t, menuStr, "2")
+
 	assert.Contains(t, menuStr, "[q] : Exit")
 
 	assert.Contains(t, menuStr, "Select an Option")

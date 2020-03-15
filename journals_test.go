@@ -29,7 +29,7 @@ func getTestJournalsConfigReader() io.Reader {
 	return bufio.NewReader(f)
 }
 
-func getTestJournals() Journals {
+func getTestJournals() JournalConfigFile {
 	journalsReader := getTestJournalsConfigReader()
 	journals, _ := parseJournals(journalsReader)
 	return journals
