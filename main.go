@@ -12,7 +12,7 @@ func main() {
 		return
 	}
 
-	journalCommander := &JournalCommander{&ShellCommandExecuter{}, journalConfigFile}
+	menuActions := &MenuActionsImpl{&ShellCommandExecuter{}, journalConfigFile}
 
 	elapsedTimeChecker := &ElapsedTimeChecker{
 		&RealLastNaggingTimeFileReader{},
@@ -20,5 +20,5 @@ func main() {
 		&RealCurrentTimeGetter{},
 	}
 
-	shjournalnagger(os.Stdout, os.Stdin, journalConfigFile, journalCommander, elapsedTimeChecker)
+	shjournalnagger(os.Stdout, os.Stdin, journalConfigFile, menuActions, elapsedTimeChecker)
 }

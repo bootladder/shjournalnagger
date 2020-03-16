@@ -23,6 +23,7 @@ func Test_RenderMenu(t *testing.T) {
 	assert.Contains(t, menuStr, "2")
 
 	assert.Contains(t, menuStr, "[q] : Exit")
+	assert.Contains(t, menuStr, "[e] : Edit Config")
 
 	assert.Contains(t, menuStr, "Select an Option")
 }

@@ -8,6 +8,7 @@ func renderMenu(journals JournalConfigFile) string {
 		menuStr += fmt.Sprintf("[%d] : %s\n", i+1, journal.Name)
 	}
 
+	menuStr += "[e] : Edit Config\n"
 	menuStr += "[q] : Exit\n\n"
 	menuStr += "Select an Option: "
 	return menuStr

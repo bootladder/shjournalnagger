@@ -52,14 +52,19 @@ func Test_InvalidUserInput_PrintsMessage(t *testing.T) {
 	assert.Contains(t, string(writer.Bytes()), "Invalid Input")
 }
 
-type MockJournalOpener struct {
-	called    bool
-	lastValue int
+type MockMenuActions struct {
+	openJournalCalled    bool
+	openConfigFileCalled bool
+	lastValue            int
 }
 
-func (m *MockJournalOpener) openJournal(i int) {
-	m.called = true
+func (m *MockMenuActions) openJournal(i int) {
+	m.openJournalCalled = true
 	m.lastValue = i
+}
+
+func (m *MockMenuActions) openConfigFile() {
+	m.openConfigFileCalled = true
 }
 
 func Test_Quit_QuitsQuietly(t *testing.T) {
@@ -80,9 +85,9 @@ func Test_N_Journals_AcceptsUserInput_1_to_N(t *testing.T) {
 
 	var writer bytes.Buffer
 	reader := bytes.NewReader([]byte("3\n"))
-	mockJournalOpener := MockJournalOpener{}
-	shjournalnagger(&writer, reader, journalConfigFile, &mockJournalOpener, &AlwaysNaggingTimeChecker{})
-	assert.Equal(t, 3, mockJournalOpener.lastValue)
+	mockMenuActions := MockMenuActions{}
+	shjournalnagger(&writer, reader, journalConfigFile, &mockMenuActions, &AlwaysNaggingTimeChecker{})
+	assert.Equal(t, 3, mockMenuActions.lastValue)
 }
 
 func Test_N_Journals_DoesNotAccept_0_Input(t *testing.T) {
@@ -92,7 +97,16 @@ func Test_N_Journals_DoesNotAccept_0_Input(t *testing.T) {
 
 	var writer bytes.Buffer
 	reader := bytes.NewReader([]byte("0\n"))
-	mockJournalOpener := MockJournalOpener{}
-	shjournalnagger(&writer, reader, journalConfigFile, &mockJournalOpener, &AlwaysNaggingTimeChecker{})
-	assert.Equal(t, false, mockJournalOpener.called)
+	mockMenuActions := MockMenuActions{}
+	shjournalnagger(&writer, reader, journalConfigFile, &mockMenuActions, &AlwaysNaggingTimeChecker{})
+	assert.Equal(t, false, mockMenuActions.openJournalCalled)
+}
+
+func Test_UserInputs_EditConfigFile_CallsMenuAction(t *testing.T) {
+	var writer bytes.Buffer
+	reader := bytes.NewReader([]byte("e\n"))
+	mockMenuActions := MockMenuActions{}
+	shjournalnagger(&writer, reader, JournalConfigFile{}, &mockMenuActions, &AlwaysNaggingTimeChecker{})
+
+	assert.True(t, mockMenuActions.openConfigFileCalled)
 }

@@ -5,13 +5,14 @@ import (
 	"os/exec"
 )
 
-//JournalOpener opens a journal
-type JournalOpener interface {
+//MenuActions does stuff
+type MenuActions interface {
 	openJournal(int)
+	openConfigFile()
 }
 
-// JournalCommander sends commands to edit journals
-type JournalCommander struct {
+// MenuActionsImpl sends commands to edit journals
+type MenuActionsImpl struct {
 	commandExecuter   CommandExecuter
 	journalConfigFile JournalConfigFile
 }
@@ -21,10 +22,15 @@ type CommandExecuter interface {
 	executeCommand(string)
 }
 
-func (j *JournalCommander) openJournal(journalNum int) {
+func (j *MenuActionsImpl) openJournal(journalNum int) {
 	path := j.journalConfigFile.Journals[journalNum-1].Path
 	editor := j.journalConfigFile.Editor
 	j.commandExecuter.executeCommand(editor + " " + path)
+}
+
+func (j *MenuActionsImpl) openConfigFile() {
+	editor := j.journalConfigFile.Editor
+	j.commandExecuter.executeCommand(editor + " " + journalConfigFilename)
 }
 
 // ShellCommandExecuter  runs commands in the shell

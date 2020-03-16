@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-var journalsFilename = "/home/steve/.shjournalnagger/journals.yaml"
+var journalConfigFilename = "/home/steve/.shjournalnagger/journals.yaml"
 
 //JournalConfigFile is the real ReadWriter.  It is a thin layer of UNTESTED code
 type JournalConfigFile struct {
@@ -25,7 +25,7 @@ type Journal struct {
 }
 
 func (j JournalConfigFile) Read(p []byte) (n int, err error) {
-	f, err := os.Open(journalsFilename)
+	f, err := os.Open(journalConfigFilename)
 	if err != nil {
 		return 0, err
 	}
@@ -38,13 +38,13 @@ func (j JournalConfigFile) Read(p []byte) (n int, err error) {
 
 func (j JournalConfigFile) Write(p []byte) (n int, err error) {
 
-	if _, err := os.Stat(journalsFilename); os.IsNotExist(err) {
+	if _, err := os.Stat(journalConfigFilename); os.IsNotExist(err) {
 		err = os.MkdirAll("/home/steve/.shjournalnagger", 0777)
 		if err != nil {
 			fmt.Printf("WRITING ERROR: %v", err)
 		}
 
-		err = ioutil.WriteFile(journalsFilename, p, 0777)
+		err = ioutil.WriteFile(journalConfigFilename, p, 0777)
 		if err != nil {
 			fmt.Printf("WRITING ERROR: %v", err)
 		}

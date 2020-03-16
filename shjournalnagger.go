@@ -11,7 +11,7 @@ func shjournalnagger(
 	userOutputWriter io.Writer,
 	userInputReader io.Reader,
 	journalConfigFile JournalConfigFile,
-	journalOpener JournalOpener,
+	menuActions MenuActions,
 	naggingIntervalTracker NaggingIntervalTracker) {
 
 	if false == naggingIntervalTracker.isNaggingIntervalExpired(journalConfigFile.NaggingIntervalSeconds) {
@@ -40,9 +40,14 @@ func shjournalnagger(
 	number, err := strconv.Atoi((line))
 	if err == nil {
 		if number > 0 && number <= len(journalConfigFile.Journals) {
-			journalOpener.openJournal(number)
+			menuActions.openJournal(number)
 			return
 		}
+	}
+
+	if string(line) == "e" {
+		menuActions.openConfigFile()
+		return
 	}
 
 	userOutputWriter.Write([]byte("Invalid Input\n"))
