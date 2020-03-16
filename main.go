@@ -12,7 +12,10 @@ func main() {
 		return
 	}
 
-	menuActions := &MenuActionsImpl{&ShellCommandExecuter{}, journalConfigFile}
+	menuActions := &MenuActionsImpl{
+		&ShellCommandExecuter{},
+		journalConfigFile,
+	}
 
 	elapsedTimeChecker := &ElapsedTimeChecker{
 		&RealLastNaggingTimeFileReader{},

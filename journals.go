@@ -8,8 +8,6 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-//JournalConfigFile hello
-
 func parseJournals(reader io.Reader) (JournalConfigFile, error) {
 
 	journalsReader := bufio.NewReader(reader)
